@@ -2,9 +2,11 @@
 norm_cfg = dict(type='SyncBN', requires_grad=True)
 model = dict(
     type='EncoderDecoder',
-    pretrained='open-mmlab://resnet50_v1c',
+#     pretrained='open-mmlab://resnet50_v1c',
+    pretrained='/home/zhijie/codes/SonyAI/pretrained/mocov2_resnet50_8xb32-coslr-200e_pascalpxhere.pth',
     backbone=dict(
-        type='ResNetV1c',
+#         type='ResNetV1c',
+        type='ResNet',
         depth=50,
         num_stages=4,
         out_indices=(0, 1, 2, 3),

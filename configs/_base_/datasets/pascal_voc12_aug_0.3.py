@@ -4,5 +4,5 @@ data = dict(
     train=dict(
         ann_dir=['SegmentationClassAug'],
         split=[
-            'ImageSets/Segmentation/aug.txt'
+            'ImageSets/Segmentation/aug_0.3.txt'
         ]))

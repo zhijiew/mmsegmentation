@@ -72,10 +72,9 @@ class CustomDataset(Dataset):
             See :class:`mmcv.fileio.FileClient` for details.
             Defaults to ``dict(backend='disk')``.
     """
+    CLASSES = ('Unlabeled', 'Wheeled', 'Belted_Tracked', 'Legged', 'Non-Traversable')
 
-    CLASSES = None
-
-    PALETTE = None
+    PALETTE = [[1, 1, 1], [2, 2, 2], [3, 3, 3], [4, 4, 4], [5, 5, 5]]
 
     def __init__(self,
                  pipeline,
