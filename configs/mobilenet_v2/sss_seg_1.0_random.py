@@ -1,6 +1,5 @@
 _base_ = '../deeplabv3/deeplabv3_r101-d8_512x1024_80k_cityscapes.py'
 model = dict(
-    pretrained='/home/zhijie/codes/SonyAI/pretrained/mocov2_sss_mobilenetv2_f01_05_ks_mmseg.pth',
     backbone=dict(
         _delete_=True,
         type='MobileNetV2',
