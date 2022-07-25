@@ -1,4 +1,4 @@
-_base_ = '../deeplabv3/deeplabv3_r101-d8_512x1024_80k_cityscapes.py'
+_base_ = '../fcn/fcn_r101-d8_512x1024_80k_cityscapes.py'
 model = dict(
     backbone=dict(
         _delete_=True,
@@ -7,8 +7,8 @@ model = dict(
         strides=(1, 2, 2, 1, 1, 1, 1),
         dilations=(1, 1, 1, 2, 2, 4, 4),
         out_indices=(1, 2, 4, 6)),
-    decode_head=dict(in_channels=320, num_classes=5),
-    auxiliary_head=dict(in_channels=96, num_classes=5))
+    decode_head=dict(in_channels=320, num_classes=5, num_convs=2, concat_input=False),
+    auxiliary_head=dict(in_channels=96, num_classes=5, num_convs=2, concat_input=False))
 
 dataset_type = 'CustomDataset'
 data_root = '/home/zhijie/datasets/SonyAI/kaggle_seg/0.5'

@@ -1,4 +1,4 @@
-_base_ = '../deeplabv3/deeplabv3_r101-d8_512x1024_80k_cityscapes.py'
+_base_ = '../fcn/fcn_r101-d8_512x1024_80k_cityscapes.py'
 model = dict(
     backbone=dict(
         _delete_=True,
@@ -7,8 +7,8 @@ model = dict(
         strides=(1, 2, 2, 1, 1, 1, 1),
         dilations=(1, 1, 1, 2, 2, 4, 4),
         out_indices=(1, 2, 4, 6)),
-    decode_head=dict(in_channels=320, num_classes=5),
-    auxiliary_head=dict(in_channels=96, num_classes=5))
+    decode_head=dict(in_channels=320, num_classes=5, num_convs=2, concat_input=False),
+    auxiliary_head=dict(in_channels=96, num_classes=5, num_convs=2, concat_input=False))
 
 dataset_type = 'CustomDataset'
 data_root = '/home/zhijie/datasets/SonyAI/kaggle_seg/0.1'
@@ -29,6 +29,23 @@ data = dict(
         img_dir='img/val',
         ann_dir='ann/val',)
 )
+img_norm_cfg = dict(mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
+test_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(type='LoadAnnotations'),
+    dict(
+        type='MultiScaleFlipAug',
+        img_scale=(960, 540),
+        flip=False,
+        transforms=[
+            dict(type='Resize', keep_ratio=False),
+            dict(type='RandomFlip'),
+            dict(type='Normalize', **img_norm_cfg),
+            dict(type='ImageToTensor', keys=['img']),
+            dict(type='Collect', keys=['img', 'filename', 'gt_semantic_seg']),
+        ])
+]
+
 runner = dict(type='IterBasedRunner', max_iters=12000)
 checkpoint_config = dict(by_epoch=False, interval=2000)
 evaluation = dict(interval=2000, metric='mIoU', pre_eval=True)
