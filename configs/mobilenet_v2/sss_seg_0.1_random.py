@@ -10,25 +10,6 @@ model = dict(
     decode_head=dict(in_channels=320, num_classes=5, num_convs=2, concat_input=False),
     auxiliary_head=dict(in_channels=96, num_classes=5, num_convs=2, concat_input=False))
 
-dataset_type = 'CustomDataset'
-data_root = '/home/zhijie/datasets/SonyAI/kaggle_seg/0.1'
-data = dict(
-    train=dict(
-        type='CustomDataset',
-        data_root=data_root,
-        img_dir='img/train',
-        ann_dir='ann/train',),
-    val=dict(
-        type='CustomDataset',
-        data_root=data_root,
-        img_dir='img/val',
-        ann_dir='ann/val',),
-    test=dict(
-        type='CustomDataset',
-        data_root=data_root,
-        img_dir='img/val',
-        ann_dir='ann/val',)
-)
 img_norm_cfg = dict(mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 test_pipeline = [
     dict(type='LoadImageFromFile'),
@@ -46,6 +27,27 @@ test_pipeline = [
         ])
 ]
 
+dataset_type = 'CustomDataset'
+data_root = '/home/zhijie/datasets/SonyAI/kaggle_seg/0.1'
+data = dict(
+    train=dict(
+        type='CustomDataset',
+        data_root=data_root,
+        img_dir='img/train',
+        ann_dir='ann/train',),
+    val=dict(
+        pipeline=test_pipeline,
+        type='CustomDataset',
+        data_root=data_root,
+        img_dir='img/val',
+        ann_dir='ann/val',),
+    test=dict(
+        pipeline=test_pipeline,
+        type='CustomDataset',
+        data_root=data_root,
+        img_dir='img/val',
+        ann_dir='ann/val',)
+)
 runner = dict(type='IterBasedRunner', max_iters=12000)
 checkpoint_config = dict(by_epoch=False, interval=2000)
 evaluation = dict(interval=2000, metric='mIoU', pre_eval=True)
